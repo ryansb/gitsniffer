@@ -1,2 +1,4 @@
 Click
 pygit2
+requests
+beautifulsoup4

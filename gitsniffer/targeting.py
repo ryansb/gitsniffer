@@ -31,3 +31,4 @@ def gen_uniq_targets():
         if url not in targets:
             targets[url] = None
             yield url
+

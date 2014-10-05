@@ -1,5 +1,5 @@
 Click
-pygit2<0.20.0
+pygit2
 requests
 beautifulsoup4
 celery

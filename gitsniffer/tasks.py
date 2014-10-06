@@ -5,7 +5,7 @@ from urllib.parse import urlparse, urljoin
 import rethinkdb as r
 
 
-app = Celery('gitsniffer_tasks', broker='redis://localhost/celery')
+app = Celery('gitsniffer_tasks', broker='redis://localhost/1')
 
 
 """

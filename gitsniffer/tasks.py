@@ -61,6 +61,7 @@ def Crawl(url, db_info):
         exists = URLExists(rdb, url)
         if needs_scraping(rdb, new_url) or exists:
             if new_parsed.netloc == parsed_url.netloc:
+                print("Crawling: {0}".format(new_url))
                 Crawl.delay(new_url, db_info)
                 Test.delay(new_url, db_info)
                 if exists:

@@ -52,5 +52,6 @@ def run_targeting():
     rdb.close()
     while True:
         for target in gen_uniq_targets():
+            print("Targeting {0}".format(target))
             Crawl.delay(target, db_info)
         time.sleep(60 * 60)  # 1 hour

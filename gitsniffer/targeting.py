@@ -38,15 +38,18 @@ def gen_uniq_targets():
 
 
 def run_targeting():
-    db_info = {'host': 'localhost', 'db': 'gitsniffer'}
+    db_info = {'host': 'localhost',}
     rdb = r.connect(**db_info)
 
     try:
-        rdb.db_create(db_info['db']).run()
+        r.db_create('gitsniffer').run(rdb)
     except:
         pass
+    rdb.close()
+    db_info['db'] = 'gitsniffer'
+    rdb = r.connect(**db_info)
     try:
-        rdb.table_create('urldata').run()
+        r.table_create('urldata').run(rdb)
     except:
         pass
     rdb.close()

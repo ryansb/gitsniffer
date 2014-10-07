@@ -7,6 +7,11 @@ import rethinkdb as r
 
 app = Celery('gitsniffer_tasks', broker='redis://localhost/1')
 
+ignore_list = ['reddit.com', 'nytimes.com',
+               'washingtonpost.com', 'wired.com',
+               'github.com', 'bbc.com', 'bbc.co.uk',
+               'medium.com', 'gmane.org', 'facebook.com',
+               'newyorker.com', 'aeon.co', 'google.com']
 
 """
 rethinkdb document format
@@ -30,7 +35,7 @@ def needs_scraping(rdb, url):
         now = r.now()
         prev = doc['last_scraped']
         diff = now - prev
-        return doc['url'] == url and diff.hours >= 5
+        return doc['url'] == url and diff.div(60*60) >= 5
 
     return not r.table('urldata').filter(filter_func).is_empty().run(rdb)
 
@@ -50,16 +55,23 @@ def UpdateURL(rdb, url):
 
 @app.task
 def Crawl(url, db_info):
-    rdb = r.Connection(**db_info)
+    rdb = r.connect(**db_info)
     parsed_url = urlparse(url)
+    if parsed_url.netloc in ignore_list:
+        rdb.close()
+        return
     resp = requests.get(url)
     resp.raise_for_status()
     soup = BeautifulSoup(resp.text)
     for item in soup.find_all('a'):
-        new_url = item['href']
+        try:
+            new_url = item['href']
+        except:
+            print("Failed to find href for {0}".format(item))
+            continue
         new_parsed = urlparse(new_url)
         exists = URLExists(rdb, url)
-        if needs_scraping(rdb, new_url) or exists:
+        if needs_scraping(rdb, new_url) or not exists:
             if new_parsed.netloc == parsed_url.netloc:
                 print("Crawling: {0}".format(new_url))
                 Crawl.delay(new_url, db_info)
@@ -68,6 +80,7 @@ def Crawl(url, db_info):
                     rdb.UpdateURL(rdb, new_url)
                 else:
                     rdb.InsertURL(rdb, new_url)
+    rdb.close()
 
 
 @app.task

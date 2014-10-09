@@ -11,7 +11,9 @@ ignore_list = ['reddit.com', 'nytimes.com',
                'washingtonpost.com', 'wired.com',
                'github.com', 'bbc.com', 'bbc.co.uk',
                'medium.com', 'gmane.org', 'facebook.com',
-               'newyorker.com', 'aeon.co', 'google.com']
+               'newyorker.com', 'aeon.co', 'google.com',
+               'techcrunch.com', 'nautilus.us', 'scientificamerican.com',
+               'mit.edu', 'cia.gov', 'wordpress.com']
 
 """
 rethinkdb document format

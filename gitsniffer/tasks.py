@@ -77,9 +77,9 @@ def Crawl(url, db_info):
                 Crawl.delay(new_url, db_info)
                 Test.delay(new_url, db_info)
                 if exists:
-                    rdb.UpdateURL(rdb, new_url)
+                    UpdateURL(rdb, new_url)
                 else:
-                    rdb.InsertURL(rdb, new_url)
+                    InsertURL(rdb, new_url)
     rdb.close()
 
 

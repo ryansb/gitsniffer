@@ -85,7 +85,7 @@ def Crawl(url, db_info):
 
 @app.task
 def Test(url, db_info):
-    rdb = r.Connection(**db_info)
+    rdb = r.connect(**db_info)
     resp = requests.get(urljoin(url, ".git/index"))
     try:
         resp.raise_for_status()

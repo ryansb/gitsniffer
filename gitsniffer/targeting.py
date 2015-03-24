@@ -10,7 +10,7 @@ def hn_link_gen():
     Grab all links off of hackernews
     yields them in a generator
     """
-    resp = requests.get("http://news.ycombinator.com")
+    resp = requests.get("http://techcrunch.com/2015/03/23/here-are-the-companies-that-presented-at-y-combinator-demo-day-day-1/")
     resp.raise_for_status()
     soup = BeautifulSoup(resp.text)
     for item in soup.find_all('a'):
